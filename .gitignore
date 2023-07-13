@@ -1,0 +1,10 @@
+# venv #
+venv/
+
+# spotify api token #
+
+token.txt
+
+# env variables #
+
+variables.env
