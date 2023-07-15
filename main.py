@@ -1,8 +1,6 @@
 import requests
 from requests.exceptions import HTTPError, InvalidSchema, ConnectionError
-import datetime
 from bs4 import BeautifulSoup
-import re
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 import sys
@@ -13,12 +11,10 @@ date_format = "%Y-%m-%d"
 bilboard_url = "https://www.billboard.com/charts/hot-100/"
 
 try:
-    user_input = input("Which year do you want to travel to? (YYYY-MM-DD):")
-    date = str(datetime.datetime.strptime(user_input, date_format).date())
+    date = input("Which year do you want to travel to? (YYYY-MM-DD):")
     year = int(date.split("-")[0])
 except ValueError:
     print("Please input correct date")
-
 try:
     response = requests.get(url=f"{bilboard_url}{date}")
     response.raise_for_status()
@@ -44,16 +40,16 @@ first_artist = soup.find(
 )
 
 if all_titles and first_title:
-    title_list_formatted = [re.sub("\s+", "", str(tag.text)) for tag in all_titles]
-    first_title_formatted = re.sub("\s+", "", str(first_title.text))
+    title_list_formatted = [tag.text.strip() for tag in all_titles]
+    first_title_formatted = first_title.text.strip()
     title_list_formatted.insert(0, first_title_formatted)
 else:
     print("Tracks not found")
     sys.exit(1)
 
 if all_artists and first_artist:
-    artist_list_formated = [re.sub("\s+", "", str(tag.text)) for tag in all_artists]
-    first_artist_formatted = re.sub("\s+", "", str(first_artist.text))
+    artist_list_formated = [tag.text.strip() for tag in all_artists]
+    first_artist_formatted = first_artist.text.strip()
     artist_list_formated.insert(0, first_artist_formatted)
 else:
     print("Artists not found")
